@@ -21,7 +21,7 @@ type Props = {
   };
 };
 
-const CharactersTable: FC<Props> = ({ characters }) => {
+const CharactersTable: FC<Props> = ({ characters, getTable }) => {
   const [open, setOpen] = useState<boolean>(false);
 
   const [characterId, setCharacterId] = useState<number>(0);
@@ -37,17 +37,10 @@ const CharactersTable: FC<Props> = ({ characters }) => {
     setOpen(!open);
   };
 
-  const [{ pageIndex, pageSize }, setPagination] = useState<PaginationState>({
+  const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 1,
     pageSize: characters?.info.pages,
   });
-
-  const pagination = {
-    pageIndex,
-    pageSize,
-  };
-
-  // console.log(pageIndex, pageSize);
 
   const columnHelper = createColumnHelper<TCharacters>();
 
@@ -221,9 +214,10 @@ const CharactersTable: FC<Props> = ({ characters }) => {
     },
     getCoreRowModel: getCoreRowModel(),
     onPaginationChange: setPagination,
-    manualPagination: true,
     debugTable: true,
   });
+
+  getTable(table);
 
   return (
     <>

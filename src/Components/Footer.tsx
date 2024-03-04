@@ -18,11 +18,20 @@ const Footer: FC = () => {
   const [page, setPage] = useState(1);
   const [filterCharacters, setFilterCharacters] = useState({});
   const methods = useForm<FormValues>();
+  const [userTable, setUserTable] = useState({});
+
+  //console.log(userTable.options?.state.pagination.pageIndex);
+
   const { data, loading } = useQuery(MAIN_LIST, {
-    variables: { page: page, filter: filterCharacters },
+    variables: {
+      page: userTable?.options?.state.pagination.pageIndex,
+      filter: filterCharacters,
+    },
   });
 
-  // console.log(loading);
+  const getTable = (table) => {
+    setUserTable(table);
+  };
 
   const onSubmit: SubmitHandler<FormValues> = ({
     name,
@@ -48,11 +57,11 @@ const Footer: FC = () => {
               <Loader variant="black" />
             </div>
           ) : (
-            <CharactersTable characters={data.characters} />
+            <CharactersTable characters={data.characters} getTable={getTable} />
           )}
         </form>
       </FormProvider>
-      <PageController page={page} setPage={setPage} />
+      <PageController page={page} setPage={setPage} userTable={userTable} />
     </div>
   );
 };

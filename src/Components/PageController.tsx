@@ -7,7 +7,7 @@ type Props = {
   setPage: React.Dispatch<React.SetStateAction<number>>;
 };
 
-const PageController: React.FC<Props> = ({ page, setPage }) => {
+const PageController: React.FC<Props> = ({ page, setPage, userTable }) => {
   const [inputValue, setInputValue] = useState(1);
 
   const switchPage = (variant: string) => {
@@ -43,6 +43,12 @@ const PageController: React.FC<Props> = ({ page, setPage }) => {
     }
   };
 
+
+  if (!userTable) return <div>lox</div>
+
+  console.log(userTable);
+  
+
   return (
     <div className="flex w-full justify-center items-center mb-8">
       <button onClick={() => switchPage("previous")}>
@@ -53,7 +59,7 @@ const PageController: React.FC<Props> = ({ page, setPage }) => {
         min={1}
         maxLength={2}
         className="max-w-8 font-bold text-2xl appearance-none text-center"
-        value={inputValue}
+        value={userTable.options?.state.pagination.pageIndex}
         onChange={(e) => setInputValue(Number(e.target.value))}
         onFocus={() =>
           document.addEventListener(
@@ -69,7 +75,8 @@ const PageController: React.FC<Props> = ({ page, setPage }) => {
         }
         onKeyDown={handleKeyPress}
       />
-      <button onClick={() => switchPage("next")}>
+
+      <button onClick={() => userTable.nextPage()}>
         <Forward />
       </button>
     </div>
